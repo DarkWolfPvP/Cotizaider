@@ -22,17 +22,22 @@
         }
         .form-group {
             margin-bottom: 15px;
+            font-size: 2vw;
         }
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            
         }
         input, textarea, select {
             width: 60%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            min-height: 1.3vw;
+            max-height: 1.5vw;
+            
         }
         input[type="checkbox" i] {
             box-sizing: content-box;
@@ -103,6 +108,7 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 15px;
+            font-size: 2vw;
         }
         .logo-preview {
             max-width: 80px;
@@ -127,6 +133,7 @@
         input, text, ::placeholder{
             color: gray;
             opacity: 70%;
+            font-size: 1vw;
         }
         
         .card {
@@ -151,4 +158,11 @@
             background-color: #A9A9A9;
             border-color: #32313174;
         }
+        .titulo{
+            font-size: 3vw;
+        } 
+        .titulo2{
+            font-size: 2vw;
+        }
+        
         
