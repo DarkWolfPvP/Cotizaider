@@ -116,6 +116,9 @@
             margin-bottom: 15px;
             font-size: 2vw;
         }
+        .logo-container input{
+            color: white;
+        }
         .logo-preview {
             max-width: 80px;
             max-height: 80px;
@@ -124,6 +127,7 @@
         .logo-upload {
             flex-grow: 1;
         }
+        
         .iva-section {
             background-color: gray;
             padding: 10px;
