@@ -14,7 +14,7 @@
         .editor-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 200px;
+            column-gap: 10vw;
             min-width: 90%;
             min-height: 80vh;
             max-height: 80vh;
@@ -23,6 +23,12 @@
         .form-group {
             margin-bottom: 15px;
             font-size: 2vw;
+        }
+        .form-group select {
+            margin-bottom: 15px;
+            font-size: 2vh;
+            min-height: 4vh;
+            max-height: 15vh;
         }
         label {
             display: block;
@@ -131,10 +137,12 @@
             margin-top: 5px;
         }
         input, text, ::placeholder{
-            color: gray;
+            color: rgb(15, 12, 12);
             opacity: 70%;
             font-size: 1vw;
+            font-weight: bold;
         }
+        
         
         .card {
             overflow: hidden;
@@ -163,6 +171,7 @@
         } 
         .titulo2{
             font-size: 2vw;
+            text-align: center;
         }
         
         
