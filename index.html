@@ -11,7 +11,14 @@
 </head>
 <body>
     <h1 class="titulo">GENERADOR DE COTIZACIONES</h1>
-    
+
+    <div class="selector">
+        <button id="selectorBoton">Añadir Cliente</button>
+        <button id="selectorBoton">Cotizaciones Guardadas</button>
+        <button id="selectorBoton">Tipo de Cotizacion</button>
+        <button id="selectorBoton">Generar PDF</button>
+    </div>
+
     <div class="editor-container" id="edicionBlock">
         <div class="card" id="Fuido">
             <h2 class="titulo2">EDICION</h2>
@@ -106,11 +113,16 @@
                 <label for="footerText">Texto de Pie de Página:</label>
                 <input type="text" id="footerText" value="Mejorando la atención médica con soluciones innovadoras.">
             </div>
-            
             <div class="form-group">
-                <label for="currency">Moneda:</label>
-                <input type="text" id="currency" value="MXN">
+                <label for="currency">Moneda</label>
+                <select id="currency">
+                    <option value="MXN">MXN</option>
+                    <option value="EURO">EURO</option>
+                    <option value="DOLAR">DOLAR</option>
+                    <option value="YEN">YEN</option>
+                </select>
             </div>
+            
             
             <div class="form-group">
                 <label for="taxInfo">Información de Impuestos:</label>

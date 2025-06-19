@@ -76,7 +76,10 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            
+            min-height: 5vh;
+            max-height: 10vh;
+            min-width: 15vw;
+            font-size: 2vh;
         }
         button:hover {
             background-color: #45a049;
@@ -134,7 +137,7 @@
             border-radius: 20px;
             margin: 15px 30%;
             max-width: 90%;
-            
+            font-size: 2vh;
             
         }
         .image-upload-container {
@@ -176,6 +179,26 @@
         .titulo2{
             font-size: 2vw;
             text-align: center;
+        }
+        .selector{
+            display: flex;
+            grid-template-columns:1fr 1fr 1fr 1fr ;
+            min-width: 20vw;
+            min-height: 5vh;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            justify-content: space-between;
+            background-color: #32313174;
+            border-radius: 10px;
+        }
+        .selector button{
+            margin: 10px;
+            border-radius: 20px;
+            background-color: #2196F3;
+        }
+        .selector button:hover{
+            background-color: rgb(8, 21, 98);
         }
         
         
