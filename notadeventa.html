@@ -1,0 +1,904 @@
+<!--ESTE DOCUMENTO ES DE COTIZACIONES-->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotaVentaider</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+</head>
+<body>
+    <h1 class="titulo">GENERADOR DE NOTAS DE VENTA</h1>
+
+    <div class="selector">
+        <button id="selectorBoton" >Añadir Cliente</button>
+        <button id="selectorBoton" >Notas Guardadas</button>
+        <button id="selectorBoton" onclick="window.location.href='index.html'">A COTIZAR</button>
+        <button id="Preview">Visualizar</button>
+
+    </div>
+
+    <div class="editor-container" id="edicionBlock">
+        <div class="card" id="Fuido">
+            <h2 class="titulo2">EDICION</h2>
+            
+            <div class="logo-container">
+                <img id="logoPreview" class="logo-preview hidden">
+                <div class="logo-upload">
+                    <label for="companyLogo">Logo de la Empresa:</label>
+                    <input type="file" id="companyLogo" accept="image/*">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="companyName">Nombre de la Empresa:</label>
+                <input type="text" id="companyName" placeholder="Coito">
+            </div>
+            
+            <div class="form-group" >
+                <label for="companyAddress">Dirección:</label>
+                <input type="text" id="companyAddress" placeholder="Coito">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyPhone">Teléfono:</label>
+                <input type="text" id="companyPhone" placeholder="Coito">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyBrand">Marca:</label>
+                <input type="text" id="companyBrand" placeholder="Coito">
+            </div>
+            
+            <div class="form-group">
+                <label for="quoteNumber">Número de Nota:</label>
+                <input type="text" id="quoteNumber" placeholder="Coito">
+            </div>
+            
+            <div class="form-group">
+                <label for="quoteDate">Fecha de Nota:</label>
+                <input type="date" id="quoteDate">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="clientName">Nombre del Cliente:</label>
+                <input type="text" id="clientName" placeholder="Coito">
+            </div>
+            
+            <div class="form-group">
+                <label for="clientAddress">Dirección del Cliente:</label>
+                <input type="text" id="clientAddress" placeholder="Coito">
+            </div>
+            
+            <h3>Productos/Servicios</h3>
+            <div id="productsContainer">
+                <!-- Productos se añadirán aquí -->
+            </div>
+            
+            <div class="form-group">
+                <label for="productType">Tipo de Producto/Servicio:</label>
+                <select id="productType">
+                    <option value="preventivo">Mantenimiento Preventivo</option>
+                    <option value="correctivo">Mantenimiento Correctivo</option>
+                    <option value="pieza">Pieza/Equipo</option>
+                    <option value="Envio">Envio</option>
+                </select>
+            </div>
+            <button id="addProduct">+ Añadir Producto/Servicio</button>
+            
+            <div class="form-group">
+                <label for="paymentType">Tipo de pago:</label>
+                <select id="paymentType" >
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Tarjeta">Tarjeta</option>
+                </select>
+            </div>
+
+            <div class="iva-section">
+                <label>
+                    <input type="checkbox" id="incluirIVA" checked>
+                    Incluir IVA (16%) en el total
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="shippingInfo">Información de Envío:</label>
+                <input type="text" id="shippingInfo" value="ENVIO **Tiempo de entrega 3-5 días hábiles.**">
+            </div>
+            
+            <div class="form-group">
+                <label for="warrantyInfo">Información de Garantía:</label>
+                <textarea id="warrantyInfo" name="mensaje" rows=""></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="warrantyStart">Inicio de garantia</label>
+                <input type="date" id="warrantyStart" >
+            </div>
+            
+            <div class="form-group">
+                <label for="currency">Moneda</label>
+                <select id="currency">
+                    <option value="MXN">MXN</option>
+                    <option value="EURO">EURO</option>
+                    <option value="DOLAR">DOLAR</option>
+                    <option value="YEN">YEN</option>
+                </select>
+            </div>
+            
+            
+            
+            
+            <button id="generatePdf">Generar PDF</button>
+            <button id="Preview">Visualizar</button>
+        </div>
+        
+        <div id="pdfPreview" class="card">
+            
+            <h2 class="titulo2">Vista Previa</h2>
+            <p class="titulo2">DA CLICK EN EL BOTON PUTA</p>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // Datos iniciales
+        let products = [];
+        let companyLogo = null;
+        let imageUploadHandler = null;
+
+        // Configurar fecha actual por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('quoteDate').value = today;
+            
+            // Fecha de validez (7 días después)
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            
+            
+            // Cargar logo
+            document.getElementById('companyLogo').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (!file.type.match('image.*')) {
+                        alert('Por favor selecciona un archivo de imagen válido (JPEG, PNG, etc.)');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        companyLogo = event.target.result;
+                        const preview = document.getElementById('logoPreview');
+                        preview.src = companyLogo;
+                        preview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Cargar productos iniciales
+            loadProducts();
+        });
+        
+        // Función para manejar la carga de imágenes de productos
+        function handleProductImageUpload(e) {
+            const displayIndex = parseInt(e.target.getAttribute('data-index'));
+            const index = displayIndex - 1;
+            const file = e.target.files[0];
+            
+            if (file) {
+                if (!file.type.match('image.*')) {
+                    alert('Por favor selecciona un archivo de imagen válido (JPEG, PNG, etc.)');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    products[index].productImage = event.target.result;
+                    
+                    const preview = document.getElementById(`product-image-preview-${displayIndex}`);
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Cargar productos
+        function loadProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            // Eliminar el event listener anterior si existe
+            if (imageUploadHandler) {
+                container.removeEventListener('change', imageUploadHandler);
+            }
+            
+            // Crear nuevo event listener para imágenes
+            imageUploadHandler = function(e) {
+                if (e.target.classList.contains('product-image')) {
+                    handleProductImageUpload(e);
+                }
+            };
+            container.addEventListener('change', imageUploadHandler);
+            
+            products.forEach((product, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-row';
+                const displayIndex = index + 1;
+                
+                let specificFields = '';
+                if (product.tipo === 'preventivo') {
+                    specificFields = `
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="text" class="product-cantidad" value="${product.cantidad || '1 Servicio'}" data-index="${displayIndex}">
+                        </div>
+                    `;
+                } else if (product.tipo === 'correctivo') {
+                    specificFields = `
+                        <div class="form-group">
+                            <label>Horas de Trabajo:</label>
+                            <input type="text" class="product-horas" value="${product.horas || '2 horas'}" data-index="${displayIndex}">
+                        </div>
+                    `;
+                } else if (product.tipo === 'pieza') {
+                    specificFields = `
+                        <div class="form-group">
+                            <label>Cantidad de Piezas:</label>
+                            <input type="text" class="product-cantidad" value="${product.cantidad || '1 PZA'}" data-index="${displayIndex}">
+                        </div>
+                    `;
+                }
+                else if (product.tipo === 'Envio') {
+                    specificFields = `
+                        <div class="form-group">
+                            <label>Cantidad de Piezas:</label>
+                            <input type="text" class="product-cantidad" value="${product.cantidad || '1 PZA'}" data-index="${displayIndex}">
+                        </div>
+                    `;
+                }
+                
+                productDiv.innerHTML = `
+                    <div class="product-header">
+                        <span class="product-type">${
+                            product.tipo === 'preventivo' ? 'Mantenimiento Preventivo' : 
+                            product.tipo === 'correctivo' ? 'Mantenimiento Correctivo' : 'Pieza/Equipo'
+                            
+                        }</span>
+                        <button class="remove-product" data-index="${displayIndex}">Eliminar</button>
+                    </div>
+                    ${specificFields}
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <textarea class="product-descripcion" rows="3" data-index="${displayIndex}">${product.descripcion}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen del Producto:</label>
+                        <div class="image-upload-container">
+                            <input type="file" class="product-image" accept="image/*" data-index="${displayIndex}">
+                            <img class="image-preview" id="product-image-preview-${displayIndex}" ${product.productImage ? `src="${product.productImage}" style="display: block;"` : 'style="display: none;"'}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio:</label>
+                        <input type="text" class="product-precio" value="${product.precio || '$0.00'}" data-index="${displayIndex}">
+                    </div>
+                    <div class="form-group">
+                        <label>Importe:</label>
+                        <input type="text" class="product-importe" value="${product.importe || '$0.00'}" data-index="${displayIndex}" readonly>
+                    </div>
+                `;
+                container.appendChild(productDiv);
+                
+                // Event listeners para actualización
+                const updateHandler = function(e) {
+                    e.target.setAttribute('data-index', displayIndex);
+                    updateProduct(e);
+                };
+                
+                productDiv.querySelector('.product-cantidad')?.addEventListener('input', updateHandler);
+                productDiv.querySelector('.product-horas')?.addEventListener('input', updateHandler);
+                productDiv.querySelector('.product-descripcion')?.addEventListener('input', updateHandler);
+                productDiv.querySelector('.product-precio')?.addEventListener('input', updateHandler);
+                
+                productDiv.querySelector('.remove-product')?.addEventListener('click', function() {
+                    this.setAttribute('data-index', displayIndex);
+                    removeProduct.call(this);
+                });
+            });
+        }
+        function sumarMeses(fechaOriginal, mesesASumar) {
+    const fecha = new Date(fechaOriginal);
+    const diaOriginal = fecha.getDate();
+    
+    fecha.setMonth(fecha.getMonth() + mesesASumar);
+    
+    // Si el día ha cambiado (por ejemplo, 31 de enero + 1 mes = 3 de marzo)
+    // Ajustamos al último día del mes anterior
+    
+    
+    return fecha;
+}
+        function updateProduct(e) {
+            const displayIndex = parseInt(e.target.getAttribute('data-index'));
+            const index = displayIndex - 1;
+            const field = e.target.className.replace('product-', '');
+            
+            if (['cantidad', 'horas', 'descripcion', 'precio'].includes(field)) {
+                products[index][field] = e.target.value;
+                
+                // Calcular importe
+                let cantidad = 1;
+                if (products[index].tipo === 'preventivo' || products[index].tipo === 'pieza') {
+                    cantidad = parseFloat(products[index].cantidad?.match(/\d+/)?.[0] || 1);
+                } else if (products[index].tipo === 'correctivo') {
+                    cantidad = parseFloat(products[index].horas?.match(/\d+/)?.[0] || 1);
+                }
+                
+                const precio = parseFloat(products[index].precio?.replace(/[^0-9.-]+/g,"") || 0);
+                if (!isNaN(cantidad) && !isNaN(precio)) {
+                    const importe = cantidad * precio;
+                    products[index].importe = "$" + importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    document.querySelector(`.product-importe[data-index="${displayIndex}"]`).value = products[index].importe;
+                }
+            }
+        }
+        
+        function removeProduct() {
+            const displayIndex = parseInt(this.getAttribute('data-index'));
+            const index = displayIndex - 1;
+            products.splice(index, 1);
+            loadProducts();
+        }
+        
+        document.getElementById('addProduct').addEventListener('click', function() {
+            const productType = document.getElementById('productType').value;
+            
+            if(productType === 'preventivo' || productType === 'correctivo' || productType === 'pieza'){
+            const newProduct = {
+                tipo: productType,
+                descripcion: productType === 'preventivo' ? 'Mantenimiento preventivo de equipo médico' : 
+                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 'Nueva pieza/equipo',
+                            
+                precio: "$0.00",
+                importe: "$0.00",
+                productImage: null
+            };
+
+            if (productType === 'preventivo' || productType === 'pieza' || productType === 'Envio') {
+                newProduct.cantidad = productType === 'preventivo' ? '1 Servicio' : '1 PZA';
+            } else if (productType === 'correctivo') {
+                newProduct.horas = '2 horas';
+            } 
+            products.push(newProduct);
+            loadProducts();
+            } else if(productType === 'Envio'){
+            const newProduct = {
+                tipo: productType,
+                descripcion: productType === 'preventivo' ? 'Mantenimiento preventivo de equipo médico' : 
+                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 'Nueva pieza/equipo',
+                            
+                precio: "$0.00",
+                importe: "$0.00",
+                productImage: "img/logocoptero.png"
+            };
+
+            if (productType === 'preventivo' || productType === 'pieza' || productType === 'Envio') {
+                newProduct.cantidad = productType === 'preventivo' ? '1 Servicio' : '1 PZA';
+            } else if (productType === 'correctivo') {
+                newProduct.horas = '2 horas';
+            } 
+            products.push(newProduct);
+            loadProducts();
+            }
+            
+            
+            
+            
+            
+        });
+        
+        // Función para formatear nombre de archivo
+        function formatFileName(name) {
+            return name.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '_')
+                      .replace(/_+/g, '_')
+                      .replace(/^_|_$/g, '');
+        }
+        document.getElementById('Preview').addEventListener('click', function(){
+            
+             const companyName = document.getElementById('companyName').value;
+            const companyAddress = document.getElementById('companyAddress').value;
+            const companyPhone = document.getElementById('companyPhone').value;
+            const companyBrand = document.getElementById('companyBrand').value;
+            const quoteNumber = document.getElementById('quoteNumber').value;
+            const quoteDate = document.getElementById('quoteDate').value;
+            const paymentType = document.getElementById('paymentType').value;
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const shippingInfo = document.getElementById('shippingInfo').value;
+            const warrantyInfo = document.getElementById('warrantyInfo').value;
+            const warrantyStart = document.getElementById('warrantyStart').value;
+            const currency = document.getElementById('currency').value;
+            const incluirIVA = document.getElementById('incluirIVA').checked;
+            
+            
+            // Crear nombre del archivo
+            const nombreArchivo = `Cotizacion_${formatFileName(clientName)}_${quoteNumber}.pdf`;
+            
+            // Calcular totales
+            let subtotal = products.reduce((sum, product) => {
+                return sum + parseFloat(product.importe.replace(/[^0-9.-]+/g,""));
+            }, 0);
+            
+            let iva = 0;
+            let total = subtotal;
+            
+            if (incluirIVA) {
+                iva = subtotal * 0.16;
+                total = subtotal + iva;
+            }
+            
+            const subtotalFormatted = "$" + subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const ivaFormatted = "$" + iva.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const totalFormatted = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // Crear PDF
+            const doc = new jsPDF();
+            
+            // Configuración de márgenes
+            const marginLeft = 15;
+            let currentY = 15;
+            
+            // ENCABEZADO CON TEXTO MÁS PEQUEÑO
+            const logoWidth = 25;
+            const logoHeight = 25;
+            const textStartX = marginLeft + logoWidth + 8;
+            
+            // Información de cotización (parte superior derecha)
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Nota: ${quoteNumber}`, 160, currentY);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Fecha: ${new Date(quoteDate).toLocaleDateString('es-MX')}`, 160, currentY + 5);
+            
+            
+            // Logo e información de empresa (texto más pequeño)
+            if (companyLogo) {
+                try {
+                    doc.addImage(companyLogo, 'JPEG', marginLeft, currentY, logoWidth, logoHeight);
+                } catch (e) {
+                    console.error("Error al cargar logo:", e);
+                }
+            }
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(companyName, textStartX, currentY + 5);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.text(companyAddress, textStartX, currentY + 10);
+            doc.text(`Tel: ${companyPhone}`, textStartX, currentY + 15);
+            doc.text(companyBrand, textStartX, currentY + 20);
+            
+            currentY += 30;
+            
+            // Información del cliente
+            doc.setFont('helvetica', 'bold');
+            doc.text('Cliente', marginLeft, currentY);
+            doc.setFont('helvetica', 'normal');
+            doc.text(clientName, marginLeft, currentY + 5);
+            doc.text(clientAddress, marginLeft, currentY + 10);
+            currentY += 20;
+            
+            // Tabla de productos
+            const headers = [["Cant.", "Imagen", "Descripción", "Precio", "Importe"]];
+            
+            // Preparar datos para la tabla
+            const body = products.map(product => {
+                return [
+                    product.cantidad || '1 PZA',
+                    '', // Celda de imagen (se manejará en didDrawCell)
+                    product.descripcion,
+                    product.precio,
+                    product.importe
+                ];
+            });
+            
+            // TABLA CON CORRECCIÓN PARA IMÁGENES DUPLICADAS
+            doc.autoTable({
+                startY: currentY,
+                head: headers,
+                body: body,
+                margin: { left: marginLeft },
+                styles: { 
+                    fontSize: 9,
+                    cellPadding: 3,
+                    minCellHeight: 25
+                },
+                columnStyles: {
+                    0: { cellWidth: 15 },
+                    1: { cellWidth: 25 },
+                    2: { cellWidth: 'auto' },
+                    3: { cellWidth: 25 },
+                    4: { cellWidth: 25 }
+                },
+                didDrawCell: function(data) {
+                    // Solo dibujar imágenes en la primera pasada (evitar duplicados)
+                    if (data.column.index === 1 && data.row.index >= 0 && data.cell.section === 'body') {
+                        const productIndex = data.row.index;
+                        const product = products[productIndex];
+                        
+                        if (product && product.productImage && !product._imageDrawn) {
+                            try {
+                                const imgWidth = 20;
+                                const imgHeight = 20;
+                                const xPos = data.cell.x + (data.cell.width - imgWidth) / 2;
+                                const yPos = data.cell.y + (data.cell.height - imgHeight) / 2;
+                                
+                                doc.addImage(
+                                    product.productImage,
+                                    'JPEG',
+                                    xPos,
+                                    yPos,
+                                    imgWidth,
+                                    imgHeight
+                                );
+                                product._imageDrawn = true;
+                            } catch (e) {
+                                console.error("Error al cargar imagen:", e);
+                                doc.text('Imagen', data.cell.x + 5, data.cell.y + 10);
+                            }
+                        }
+                    }
+                },
+                willDrawCell: function(data) {
+                    // Resetear el flag antes de dibujar cada celda
+                    if (data.row.index >= 0 && data.column.index === 1) {
+                        const product = products[data.row.index];
+                        if (product) product._imageDrawn = false;
+                    }
+                }
+            });
+            
+            currentY = doc.lastAutoTable.finalY + 10;
+            
+            // Información de envío
+            doc.setFontSize(10);
+            doc.text(shippingInfo, marginLeft, currentY);
+            currentY += 10;
+            
+            // Garantía
+            
+            
+            // Desglose de totales con IVA
+            doc.setFontSize(10);
+            doc.text(`Subtotal: ${subtotalFormatted}`, 150, currentY);
+            
+            if (incluirIVA) {
+                doc.text(`IVA (16%): ${ivaFormatted}`, 150, currentY + 5);
+                currentY += 5;
+            }
+            doc.text(`Total: ${totalFormatted}`, 150, currentY + 5);
+            const fechaT=sumarMeses(warrantyStart,6);
+            const fechaTermina=fechaT.toString();
+            
+            function contarLineas(texto) {
+            // Si el texto está vacío, consideramos 1 línea
+                if (!texto.trim()) return 1;
+                
+                // Dividimos por saltos de línea y filtramos líneas vacías si es necesario
+                return texto.split('\n').length;
+                function dividirConSaltos(texto) {
+                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                }
+
+                
+            }   
+            function dividirConSaltos(texto) {
+                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                }
+            const textoLargo = warrantyInfo;
+                const textoConSaltos = dividirConSaltos(textoLargo);
+            const lineas = contarLineas(textoConSaltos);
+            
+            doc.text(`Garantia inicia: ${warrantyStart}`, marginLeft, currentY);
+            doc.text(`Garantia termina: ${fechaTermina}`, marginLeft, currentY + 5);
+            doc.text(`TIPO DE PAGO: ${paymentType}`,marginLeft, currentY + 10);
+            
+            currentY += 20;
+
+            if(warrantyInfo.length> 80){
+                function dividirConSaltos(texto) {
+                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
+                }
+
+                const textoLargo = warrantyInfo;
+                const textoConSaltos = dividirConSaltos(textoLargo);
+                doc.text(textoConSaltos,marginLeft + 10, currentY);
+            }else{
+                doc.text(warrantyInfo, marginLeft + 10, currentY);
+                currentY += 10;
+            }
+            if(lineas>1){
+                currentY += lineas*2;
+                doc.text('_____________________________',marginLeft, currentY + 40);
+            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+            }else{
+                doc.text('_____________________________',marginLeft, currentY + 40);
+            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+            }
+            
+            // Pie de página
+             
+            // Vista previa
+            const pdfOutput = doc.output('datauristring');
+            document.getElementById('pdfPreview').innerHTML = `
+                <iframe src="${pdfOutput}" width="100%" height="90%"></iframe>
+            `;
+        })
+        document.getElementById('generatePdf').addEventListener('click', function() {
+            // Obtener valores del formulario
+            const companyName = document.getElementById('companyName').value;
+            const companyAddress = document.getElementById('companyAddress').value;
+            const companyPhone = document.getElementById('companyPhone').value;
+            const companyBrand = document.getElementById('companyBrand').value;
+            const quoteNumber = document.getElementById('quoteNumber').value;
+            const quoteDate = document.getElementById('quoteDate').value;
+            const paymentType = document.getElementById('paymentType').value;
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const shippingInfo = document.getElementById('shippingInfo').value;
+            const warrantyInfo = document.getElementById('warrantyInfo').value;
+            const warrantyStart = document.getElementById('warrantyStart').value;
+            const currency = document.getElementById('currency').value;
+            const incluirIVA = document.getElementById('incluirIVA').checked;
+            
+            // Crear nombre del archivo
+            const nombreArchivo = `Cotizacion_${formatFileName(clientName)}_${quoteNumber}.pdf`;
+            
+            // Calcular totales
+            let subtotal = products.reduce((sum, product) => {
+                return sum + parseFloat(product.importe.replace(/[^0-9.-]+/g,""));
+            }, 0);
+            
+            let iva = 0;
+            let total = subtotal;
+            
+            if (incluirIVA) {
+                iva = subtotal * 0.16;
+                total = subtotal + iva;
+            }
+            
+            const subtotalFormatted = "$" + subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const ivaFormatted = "$" + iva.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const totalFormatted = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // Crear PDF
+            const doc = new jsPDF();
+            
+            // Configuración de márgenes
+            const marginLeft = 15;
+            const marginRight =30;
+            let currentY = 15;
+            
+            // ENCABEZADO CON TEXTO MÁS PEQUEÑO
+            const logoWidth = 25;
+            const logoHeight = 25;
+            const textStartX = marginLeft + logoWidth + 8;
+            
+            // Información de cotización (parte superior derecha)
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Nota: ${quoteNumber}`, 160, currentY);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Fecha: ${new Date(quoteDate).toLocaleDateString('es-MX')}`, 160, currentY + 5);
+            ;
+            
+            // Logo e información de empresa (texto más pequeño)
+            if (companyLogo) {
+                try {
+                    doc.addImage(companyLogo, 'JPEG', marginLeft, currentY, logoWidth, logoHeight);
+                } catch (e) {
+                    console.error("Error al cargar logo:", e);
+                }
+            }
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(companyName, textStartX, currentY + 5);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.text(companyAddress, textStartX, currentY + 10);
+            doc.text(`Tel: ${companyPhone}`, textStartX, currentY + 15);
+            doc.text(companyBrand, textStartX, currentY + 20);
+            
+            currentY += 30;
+            
+            // Información del cliente
+            doc.setFont('helvetica', 'bold');
+            doc.text('Cliente', marginLeft, currentY);
+            doc.setFont('helvetica', 'normal');
+            doc.text(clientName, marginLeft, currentY + 5);
+            doc.text(clientAddress, marginLeft, currentY + 10);
+            currentY += 20;
+            
+            // Tabla de productos
+            const headers = [["Cant.", "Imagen", "Descripción", "Precio", "Importe"]];
+            
+            // Preparar datos para la tabla
+            const body = products.map(product => {
+                return [
+                    product.cantidad || '1 PZA',
+                    '', // Celda de imagen (se manejará en didDrawCell)
+                    product.descripcion,
+                    product.precio,
+                    product.importe
+                ];
+            });
+            
+            // TABLA CON CORRECCIÓN PARA IMÁGENES DUPLICADAS
+            doc.autoTable({
+                startY: currentY,
+                head: headers,
+                body: body,
+                margin: { left: marginLeft },
+                styles: { 
+                    fontSize: 9,
+                    cellPadding: 3,
+                    minCellHeight: 25
+                },
+                columnStyles: {
+                    0: { cellWidth: 15 },
+                    1: { cellWidth: 25 },
+                    2: { cellWidth: 'auto' },
+                    3: { cellWidth: 25 },
+                    4: { cellWidth: 25 }
+                },
+                didDrawCell: function(data) {
+                    // Solo dibujar imágenes en la primera pasada (evitar duplicados)
+                    if (data.column.index === 1 && data.row.index >= 0 && data.cell.section === 'body') {
+                        const productIndex = data.row.index;
+                        const product = products[productIndex];
+                        
+                        if (product && product.productImage && !product._imageDrawn) {
+                            try {
+                                const imgWidth = 20;
+                                const imgHeight = 20;
+                                const xPos = data.cell.x + (data.cell.width - imgWidth) / 2;
+                                const yPos = data.cell.y + (data.cell.height - imgHeight) / 2;
+                                
+                                doc.addImage(
+                                    product.productImage,
+                                    'JPEG', 
+                                    xPos,
+                                    yPos,
+                                    imgWidth,
+                                    imgHeight
+                                );
+                                product._imageDrawn = true;
+                            } catch (e) {
+                                console.error("Error al cargar imagen:", e);
+                                doc.text('Imagen', data.cell.x + 5, data.cell.y + 10);
+                            }
+                        }
+                    }
+                },
+                willDrawCell: function(data) {
+                    // Resetear el flag antes de dibujar cada celda
+                    if (data.row.index >= 0 && data.column.index === 1) {
+                        const product = products[data.row.index];
+                        if (product) product._imageDrawn = false;
+                    }
+                }
+            });
+            
+            currentY = doc.lastAutoTable.finalY + 10;
+            
+            // Información de envío
+            doc.setFontSize(10);
+            doc.text(shippingInfo, marginLeft, currentY);
+            currentY += 10;
+            function dividirConSaltos(texto) {
+                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                }
+
+                
+            // Garantía
+            if(warrantyInfo.length> 50){
+                function dividirConSaltos(texto) {
+                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                }
+                
+                const textoLargo = warrantyInfo;
+                const textoConSaltos = dividirConSaltos(textoLargo);
+                doc.text(textoConSaltos,marginLeft, currentY);
+            }else{
+                doc.text(warrantyInfo, marginLeft, currentY);
+                currentY += 10;
+            }
+            
+            // Desglose de totales con IVA
+            doc.setFontSize(10);
+            doc.text(`Subtotal: ${subtotalFormatted}`, 150, currentY);
+            
+            if (incluirIVA) {
+                doc.text(`IVA (16%): ${ivaFormatted}`, 150, currentY + 5);
+                currentY += 5;
+            }
+            doc.text(`Total: ${totalFormatted}`, 150, currentY + 5);
+            const fechaT=sumarMeses(warrantyStart,6);
+            const fechaTermina=fechaT.toString();
+            // Pie de página
+            function contarLineas(texto) {
+            // Si el texto está vacío, consideramos 1 línea
+                if (!texto.trim()) return 1;
+                
+                // Dividimos por saltos de línea y filtramos líneas vacías si es necesario
+                return texto.split('\n').length;
+                
+            }   
+             function dividirConSaltos(texto) {
+                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
+                }
+
+                const textoLargo = warrantyInfo;
+                const textoConSaltos = dividirConSaltos(textoLargo);
+                const lineas = contarLineas(textoConSaltos);
+            doc.text(`Garantia inicia: ${warrantyStart}`, marginLeft, currentY);
+            doc.text(`Garantia termina: ${fechaTermina}`, marginLeft, currentY + 5);
+            doc.text(`TIPO DE PAGO: ${paymentType}`,marginLeft, currentY + 10);
+            
+            currentY += 20;
+
+            if(warrantyInfo.length> 80){
+                function dividirConSaltos(texto) {
+                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
+                }
+
+                const textoLargo = warrantyInfo;
+                const textoConSaltos = dividirConSaltos(textoLargo);
+                doc.text(textoConSaltos,marginLeft + 10, currentY);
+            }else{
+                doc.text(warrantyInfo, marginLeft + 10, currentY);
+                currentY += 10;
+            }
+
+            if(lineas>1){
+                currentY += lineas*2;
+                doc.text('_____________________________',marginLeft, currentY + 40);
+            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+            }else{
+                doc.text('_____________________________',marginLeft, currentY + 40);
+            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+            }      
+            
+            // Vista previa
+            const pdfOutput = doc.output('datauristring');
+            document.getElementById('pdfPreview').innerHTML = `
+                <iframe src="${pdfOutput}" width="100%" height="500px"></iframe>
+            `;
+            
+            // Guardar con nombre personalizado
+            doc.save(nombreArchivo);
+        });
+    </script>
+</body>
+</html>
