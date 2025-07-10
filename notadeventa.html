@@ -319,7 +319,9 @@
         }
         function sumarMeses(fechaOriginal, mesesASumar) {
     const fecha = new Date(fechaOriginal);
-    const diaOriginal = fecha.getDate();
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const año = fecha.getFullYear();
     
     fecha.setMonth(fecha.getMonth() + mesesASumar);
     
@@ -327,7 +329,7 @@
     // Ajustamos al último día del mes anterior
     
     
-    return fecha;
+    return `${año}-${mes}-${dia}`;
 }
         function updateProduct(e) {
             const displayIndex = parseInt(e.target.getAttribute('data-index'));
