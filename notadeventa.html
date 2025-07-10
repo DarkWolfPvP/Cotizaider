@@ -19,7 +19,7 @@
         <button id="selectorBoton" >Añadir Cliente</button>
         <button id="selectorBoton" >Notas Guardadas</button>
         <button id="selectorBoton" onclick="window.location.href='index.html'">A COTIZAR</button>
-        <button id="Preview">Visualizar</button>
+        <button id="vista">Visualizar</button>
 
     </div>
 
@@ -414,7 +414,7 @@
                       .replace(/_+/g, '_')
                       .replace(/^_|_$/g, '');
         }
-        document.getElementById('Preview').addEventListener('click', function(){
+        function preview(){
             
              const companyName = document.getElementById('companyName').value;
             const companyAddress = document.getElementById('companyAddress').value;
@@ -649,7 +649,11 @@
             document.getElementById('pdfPreview').innerHTML = `
                 <iframe src="${pdfOutput}" width="100%" height="90%"></iframe>
             `;
-        })
+            
+        }
+        document.getElementById('Preview').addEventListener('click', preview);
+        document.getElementById('vista').addEventListener('click', preview);
+        
         document.getElementById('generatePdf').addEventListener('click', function() {
             // Obtener valores del formulario
             const companyName = document.getElementById('companyName').value;

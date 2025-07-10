@@ -19,7 +19,7 @@
         <button id="selectorBoton" >Añadir Cliente</button>
         <button id="selectorBoton" >Cotizaciones Guardadas</button>
         <button id="selectorBoton" onclick="window.location.href='notadeventa.html'">Ir a Nota de Venta</button>
-        <button id="selectorBoton" >VISUALIZAR</button>
+        <button id="vista">VISUALIZAR</button>
     </div>
 
     <div class="editor-container" id="edicionBlock">
@@ -133,7 +133,7 @@
             </div>
             
             <button id="generatePdf">Generar PDF</button>
-            <button id="Preview">Visualizar</button>
+            <button id="Preview" >Visualizar</button>
         </div>
         
         <div id="pdfPreview" class="card">
@@ -400,7 +400,7 @@
                       .replace(/_+/g, '_')
                       .replace(/^_|_$/g, '');
         }
-        document.getElementById('Preview').addEventListener('click', function(){
+        function preview(){
             
              const companyName = document.getElementById('companyName').value;
             const companyAddress = document.getElementById('companyAddress').value;
@@ -593,7 +593,9 @@
             document.getElementById('pdfPreview').innerHTML = `
                 <iframe src="${pdfOutput}" width="100%" height="90%"></iframe>
             `;
-        })
+        }
+        document.getElementById('Preview').addEventListener('click', preview);
+        document.getElementById('vista').addEventListener('click', preview);
         document.getElementById('generatePdf').addEventListener('click', function() {
             // Obtener valores del formulario
             const companyName = document.getElementById('companyName').value;
