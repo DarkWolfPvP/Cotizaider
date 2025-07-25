@@ -634,15 +634,10 @@
             doc.text(`Garantia termina: ${fechaTermina}`, marginLeft, currentY + 5);
             doc.text(`TIPO DE PAGO: ${paymentType}`,marginLeft, currentY + 10);
             
-            currentY += 20;
+            currentY += 15;
 
-            if(warrantyInfo.length> 80){
-                function dividirConSaltos(texto) {
-                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
-                }
-
-                const textoLargo = warrantyInfo;
-                const textoConSaltos = dividirConSaltos(textoLargo);
+            if(warrantyInfo.length> 50){
+                
                 doc.text(textoConSaltos,marginLeft + 10, currentY);
             }else{
                 doc.text(warrantyInfo, marginLeft + 10, currentY);
@@ -840,18 +835,7 @@
 
                 
             // Garantía
-            if(warrantyInfo.length> 50){
-                function dividirConSaltos(texto) {
-                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
-                }
-                
-                const textoLargo = warrantyInfo;
-                const textoConSaltos = dividirConSaltos(textoLargo);
-                doc.text(textoConSaltos,marginLeft, currentY);
-            }else{
-                doc.text(warrantyInfo, marginLeft, currentY);
-                currentY += 10;
-            }
+            
             
             // Desglose de totales con IVA
             doc.setFontSize(10);
@@ -889,7 +873,7 @@
                 
             }   
              function dividirConSaltos(texto) {
-                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
+                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
                 }
 
                 const textoLargo = warrantyInfo;
@@ -899,21 +883,16 @@
             doc.text(`Garantia termina: ${fechaTermina}`, marginLeft, currentY + 5);
             doc.text(`TIPO DE PAGO: ${paymentType}`,marginLeft, currentY + 10);
             
-            currentY += 20;
 
-            if(warrantyInfo.length> 80){
-                function dividirConSaltos(texto) {
-                    return texto.match(/.{1,80}/g)?.join('\n') || texto;
-                }
+            currentY += 15;
 
-                const textoLargo = warrantyInfo;
-                const textoConSaltos = dividirConSaltos(textoLargo);
+            if(warrantyInfo.length> 50){
+                
                 doc.text(textoConSaltos,marginLeft + 10, currentY);
             }else{
                 doc.text(warrantyInfo, marginLeft + 10, currentY);
                 currentY += 10;
             }
-
             if(lineas>1){
                 currentY += lineas*2;
                 doc.text('_____________________________',marginLeft, currentY + 40);
