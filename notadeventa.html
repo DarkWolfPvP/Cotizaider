@@ -416,6 +416,8 @@
                       .replace(/_+/g, '_')
                       .replace(/^_|_$/g, '');
         }
+        document.getElementById('Preview').addEventListener('click', preview);
+        document.getElementById('vista').addEventListener('click', preview);
         function preview(){
             
              const companyName = document.getElementById('companyName').value;
@@ -590,6 +592,21 @@
                 doc.text(`IVA (16%): ${ivaFormatted}`, 150, currentY + 5);
                 currentY += 5;
             }
+            function sumarMeses(fechaOriginal, mesesASumar) {
+    const fecha = new Date(fechaOriginal);
+    fecha.setMonth(fecha.getMonth() + mesesASumar);
+    
+    // Ajuste para casos como 31 de enero + 1 mes:
+    if (fecha.getDate() !== new Date(fechaOriginal).getDate()) {
+        fecha.setDate(0); // Retrocede al último día del mes anterior
+    }
+    
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const año = fecha.getFullYear();
+    
+    return `${año}-${mes}-${dia}`;
+}
             doc.text(`Total: ${totalFormatted}`, 150, currentY + 5);
             const fechaT=sumarMeses(warrantyStart,6);
             const fechaTermina=fechaT.toString();
@@ -610,7 +627,7 @@
                     return texto.match(/.{1,50}/g)?.join('\n') || texto;
                 }
             const textoLargo = warrantyInfo;
-                const textoConSaltos = dividirConSaltos(textoLargo);
+            const textoConSaltos = dividirConSaltos(textoLargo);
             const lineas = contarLineas(textoConSaltos);
             
             doc.text(`Garantia inicia: ${warrantyStart}`, marginLeft, currentY);
@@ -634,14 +651,14 @@
             if(lineas>1){
                 currentY += lineas*2;
                 doc.text('_____________________________',marginLeft, currentY + 40);
-            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
-            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
-            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+                doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+                doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+                doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
             }else{
                 doc.text('_____________________________',marginLeft, currentY + 40);
-            doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
-            doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
-            doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
+                doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
+                doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
+                doc.text('Firma del cliente', marginLeft + 130, currentY + 45);
             }
             
             // Pie de página
@@ -653,8 +670,7 @@
             `;
             
         }
-        document.getElementById('Preview').addEventListener('click', preview);
-        document.getElementById('vista').addEventListener('click', preview);
+        
         
         document.getElementById('generatePdf').addEventListener('click', function() {
             // Obtener valores del formulario
@@ -845,6 +861,21 @@
                 doc.text(`IVA (16%): ${ivaFormatted}`, 150, currentY + 5);
                 currentY += 5;
             }
+           function sumarMeses(fechaOriginal, mesesASumar) {
+    const fecha = new Date(fechaOriginal);
+    fecha.setMonth(fecha.getMonth() + mesesASumar);
+    
+    // Ajuste para casos como 31 de enero + 1 mes:
+    if (fecha.getDate() !== new Date(fechaOriginal).getDate()) {
+        fecha.setDate(0); // Retrocede al último día del mes anterior
+    }
+    
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const año = fecha.getFullYear();
+    
+    return `${año}-${mes}-${dia}`;
+}
             doc.text(`Total: ${totalFormatted}`, 150, currentY + 5);
             const fechaT=sumarMeses(warrantyStart,6);
             const fechaTermina=fechaT.toString();
