@@ -618,13 +618,13 @@
                 // Dividimos por saltos de línea y filtramos líneas vacías si es necesario
                 return texto.split('\n').length;
                 function dividirConSaltos(texto) {
-                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                    return texto.match(/.{1,70}/g)?.join('\n') || texto;
                 }
 
                 
             }   
             function dividirConSaltos(texto) {
-                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                    return texto.match(/.{1,70}/g)?.join('\n') || texto;
                 }
             const textoLargo = warrantyInfo;
             const textoConSaltos = dividirConSaltos(textoLargo);
@@ -636,15 +636,15 @@
             
             currentY += 15;
 
-            if(warrantyInfo.length> 50){
+            if(warrantyInfo.length> 70){
                 
-                doc.text(textoConSaltos,marginLeft + 10, currentY);
+                doc.text(textoConSaltos,marginLeft + 20, currentY);
             }else{
-                doc.text(warrantyInfo, marginLeft + 10, currentY);
+                doc.text(warrantyInfo, marginLeft + 20, currentY);
                 currentY += 10;
             }
             if(lineas>1){
-                currentY += lineas*2;
+                currentY += lineas*3;
                 doc.text('_____________________________',marginLeft, currentY + 40);
                 doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
                 doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
@@ -873,7 +873,7 @@
                 
             }   
              function dividirConSaltos(texto) {
-                    return texto.match(/.{1,50}/g)?.join('\n') || texto;
+                    return texto.match(/.{1,70}/g)?.join('\n') || texto;
                 }
 
                 const textoLargo = warrantyInfo;
@@ -886,15 +886,15 @@
 
             currentY += 15;
 
-            if(warrantyInfo.length> 50){
+            if(warrantyInfo.length> 70){
                 
-                doc.text(textoConSaltos,marginLeft + 10, currentY);
+                doc.text(textoConSaltos,marginLeft + 20, currentY);
             }else{
-                doc.text(warrantyInfo, marginLeft + 10, currentY);
+                doc.text(warrantyInfo, marginLeft + 20, currentY);
                 currentY += 10;
             }
             if(lineas>1){
-                currentY += lineas*2;
+                currentY += lineas*3;
                 doc.text('_____________________________',marginLeft, currentY + 40);
             doc.text('                                                                                                                     _____________________________',marginLeft, currentY + 40); 
             doc.text('Firma del asesor',marginLeft + 15, currentY + 45); 
