@@ -154,14 +154,21 @@
 
         // Configurar fecha actual por defecto
         document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('quoteDate').value = today;
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const fechaFormateada = `${year}/${month}/${day}`;
+
+            document.getElementById('quoteDate').value = fechaFormateada;
             
             // Fecha de validez (7 días después)
             const nextWeek = new Date();
-            nextWeek.setDate(nextWeek.getDate() + 7);
-            document.getElementById('validUntil').value = nextWeek.toISOString().split('T')[0];
-            
+             const year2 = nextWeek.getFullYear();
+            const month2 = String(today.getMonth() + 1).padStart(2, '0');
+            const day2 = String(today.getDate()).padStart(2, '0');
+            const fechaFormateada2 = `${year2}/${month2}/${day2}`;
+            document.getElementById('validUntil').value = fechaFormateada2;
             // Cargar logo
             document.getElementById('companyLogo').addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -456,8 +463,8 @@
             doc.setFont('helvetica', 'bold');
             doc.text(`Cotización: ${quoteNumber}`, 160, currentY);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Fecha: ${new Date(quoteDate).toLocaleDateString('es-MX')}`, 160, currentY + 5);
-            doc.text(`Válido hasta: ${new Date(validUntil).toLocaleDateString('es-MX')}`, 160, currentY + 10);
+            doc.text(`Fecha: ${quoteDate}`, 160, currentY + 5);
+            doc.text(`Válido hasta: ${validUntil}`, 160, currentY + 10);
             
             // Logo e información de empresa (texto más pequeño)
             if (companyLogo) {
@@ -651,8 +658,8 @@
             doc.setFont('helvetica', 'bold');
             doc.text(`Cotización: ${quoteNumber}`, 160, currentY);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Fecha: ${new Date(quoteDate).toLocaleDateString('es-MX')}`, 160, currentY + 5);
-            doc.text(`Válido hasta: ${new Date(validUntil).toLocaleDateString('es-MX')}`, 160, currentY + 10);
+            doc.text(`Fecha: ${quoteDate}`, 160, currentY + 5);
+            doc.text(`Válido hasta: ${validUntil}`, 160, currentY + 10);
             
             // Logo e información de empresa (texto más pequeño)
             if (companyLogo) {
