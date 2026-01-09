@@ -17,7 +17,7 @@
             column-gap: 10vw;
             min-width: 90%;
             min-height: 80vh;
-            max-height: 80vh;
+            
             align-items: normal;
         }
         .form-group {
@@ -200,7 +200,3 @@
         .selector button:hover{
             background-color: rgb(8, 21, 98);
         }
-        .selectorBoton:hover{
-            
-        }
-        
