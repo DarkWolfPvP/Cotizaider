@@ -387,17 +387,24 @@
         document.getElementById('addProduct').addEventListener('click', function() {
             const productType = document.getElementById('productType').value;
             
+            const productImages = {
+                preventivo: 'MP.jpeg',
+                correctivo: 'MCXH.jpeg',
+                Envio: 'ENVIO.jpeg'
+            };
+
             if(productType === 'preventivo' || productType === 'correctivo' || productType === 'pieza'){
             const newProduct = {
                 tipo: productType,
                 descripcion: productType === 'preventivo' ? 'Mantenimiento preventivo de equipo médico' : 
-                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 'Nueva pieza/equipo',
+                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 
+                            productType === 'Envio' ? 'ENVIO' : 'Nueva pieza/equipo',
                             
                 precio: "$0.00",
                 importe: "$0.00",
                 descuentoPorcentaje: 0, // NUEVO
                 descuentoMonto: 0,      // NUEVO
-                productImage: null
+                productImage: productImages[productType] || null
             };
 
             if (productType === 'preventivo' || productType === 'pieza' || productType === 'Envio') {
@@ -411,13 +418,14 @@
             const newProduct = {
                 tipo: productType,
                 descripcion: productType === 'preventivo' ? 'Mantenimiento preventivo de equipo médico' : 
-                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 'Nueva pieza/equipo',
+                            productType === 'correctivo' ? 'Reparación y mantenimiento correctivo' : 
+                            productType === 'Envio' ? 'ENVIO' : 'Nueva pieza/equipo',
                             
                 precio: "$0.00",
                 importe: "$0.00",
                 descuentoPorcentaje: 0, // NUEVO
                 descuentoMonto: 0,      // NUEVO
-                productImage: "img/logocoptero.png"
+                productImage: productImages[productType] || null
             };
 
             if (productType === 'preventivo' || productType === 'pieza' || productType === 'Envio') {
