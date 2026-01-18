@@ -10,6 +10,12 @@ h1{
     border-radius: 1rem;
 }
 
+h3{
+    grid-column: 1/4;
+    text-align: center;
+    color: white;
+}
+
 .selector{
     background-color:black;
     display:flex;
@@ -34,6 +40,7 @@ h1{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
+    box-shadow: 10px 5px 5px rgb(0, 17, 29);
 }
 
 .titulo2{
@@ -57,8 +64,15 @@ h1{
 .obser{
     grid-column: 1/4;
     grid-row: 8/9;
+    align-items: center;
 }
 
-h3{
-    grid-column: 1/4;
+#generatePdf{
+    grid-row: 9/10;
+    grid-column: 1/2;
+}
+
+#Preview{
+    grid-row: 9/10;
+    grid-column: 3/4;
 }
