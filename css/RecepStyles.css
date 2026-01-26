@@ -66,6 +66,14 @@ h3{
     grid-row: 8/9;
     align-items: center;
 }
+.divEquipo{
+    grid-row: 9/10;
+    grid-column: 1/4;
+}
+.quitarFormato{
+    background-color: red;
+    color: white;
+}
 
 #generatePdf{
     grid-row: 9/10;

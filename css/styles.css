@@ -200,3 +200,25 @@
         .selector button:hover{
             background-color: rgb(8, 21, 98);
         }
+        @media (min-width: 801px){
+            
+        }
+        @media (max-width: 800px){
+                .noResp:nth-child(1),
+                .noResp:nth-child(2){
+                    display: none;
+                }
+                .editor-container{
+                    display: grid;
+                    grid-template-rows: 1fr, 1fr;
+                    grid-template-columns: 1fr;
+                }
+                .card{
+                    display:inline-grid;
+                    grid-template-rows: repeat(3, 1fr);
+                }
+                #preview iframe{
+                    height: auto;
+                }
+            
+        }
