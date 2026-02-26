@@ -10,7 +10,8 @@
     <div class="container">
         <h1>RECEPCION</h1>
         <button class="btn-agregar" onclick="abrirModal()">➕ Agregar Cliente</button>
-
+        <button class="btn-agregar" onclick="ModalRecep()">➕ Recepcion de Equipo</button>
+        
         <!-- Lista de clientes -->
         <div class="clientes-lista">
             <h3>Recepciones realizadas</h3>
@@ -20,7 +21,7 @@
         </div>
     </div>
 
-    <!-- Modal flotante -->
+    <!-- Modal flotante de añadir cliente-->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h2>Nueva Recepción</h2>
@@ -52,6 +53,68 @@
             </form>
         </div>
     </div>
+    <!--Modal flotante de recepcion-->
+    <div class="modal-overlay" id="modalRecepOverlay">
+        <div class="modal">
+            <h2>Nueva Recepción</h2>
+            <div class="progress" id="progress">Paso 1 de 3</div>
+            
+            <form id="clienteForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="nombre">Equipo: </label>
+                    <input type="text" id="nombre" placeholder="Ej: Monitor " autocomplete="off">
+                    <div class="error-message" id="errorNombre">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="marca">Marca: </label>
+                    <input type="text" id="marca" placeholder="Ej: Mindray" autocomplete="off">
+                    <div class="error-message" id="errorMarca">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelo">Modelo: </label>
+                    <input type="text" id="modelo" placeholder="Ej: Umec" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sn">Numero de serie: </label>
+                    <input type="text" id="sn" placeholder="Ej: 1234" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="acces">Accesorios: </label>
+                    <input type="text" id="acces" placeholder="Ej: sensores, cable ac" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="problem">Problematica mencionada: </label>
+                    <input type="text" id="problem" placeholder="Ej: el perro lo mio" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceType">Tipo de servicio: </label>
+                    <input type="text" id="serviceType" placeholder="Ej: MP" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Client">cliente: </label>
+                    <input type="text" id="Client" placeholder="Ej: marianita" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                    <button type="button" class="btn-siguiente" id="btnSiguiente" onclick="siguientePaso()">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         let pasoActual = 1;
@@ -71,8 +134,15 @@
             document.getElementById('nombre').focus();
         }
 
+        function ModalRecep() {
+            resetearFormulario();
+            document.getElementById('modalRecepOverlay').style.display = 'flex';
+            document.getElementById('nombre').focus();
+        }
+
         function cerrarModal() {
             document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('modalRecepOverlay').style.display = 'none';
             resetearFormulario();
         }
 
