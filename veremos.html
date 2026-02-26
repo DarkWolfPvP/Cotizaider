@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css\veremos.css">
+    <title>Gestión de Clientes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>RECEPCION</h1>
+        <button class="btn-agregar" onclick="abrirModal()">➕ Agregar Cliente</button>
+
+        <!-- Lista de clientes -->
+        <div class="clientes-lista">
+            <h3>Recepciones realizadas</h3>
+            <div class="clientes-grid" id="clientesGrid">
+                <div class="empty-message">No hay clientes registrados</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal flotante -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h2>Nueva Recepción</h2>
+            <div class="progress" id="progress">Paso 1 de 3</div>
+            
+            <form id="clienteForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="nombre">Equipo: </label>
+                    <input type="text" id="nombre" placeholder="Ej: Monitor " autocomplete="off">
+                    <div class="error-message" id="errorNombre">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="marca">Marca: </label>
+                    <input type="text" id="marca" placeholder="Ej: Mindray" autocomplete="off">
+                    <div class="error-message" id="errorMarca">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelo">Modelo: </label>
+                    <input type="text" id="modelo" placeholder="Ej: Umec" autocomplete="off">
+                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                    <button type="button" class="btn-siguiente" id="btnSiguiente" onclick="siguientePaso()">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let pasoActual = 1;
+        const campos = ['nombre', 'marca', 'modelo'];
+        let clienteActual = {
+            nombre: '',
+            marca: '',
+            modelo: ''
+        };
+        
+        // Array para almacenar los clientes
+        let clientes = [];
+
+        function abrirModal() {
+            resetearFormulario();
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.getElementById('nombre').focus();
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            resetearFormulario();
+        }
+
+        function resetearFormulario() {
+            pasoActual = 1;
+            clienteActual = { nombre: '', marca: '', modelo: '' };
+            campos.forEach(campo => {
+                document.getElementById(campo).value = '';
+                document.getElementById(campo).style.display = 'block';
+                document.getElementById(campo).classList.remove('error');
+            });
+            
+            // Mostrar solo el primer campo
+            document.getElementById('nombre').style.display = 'block';
+            document.getElementById('marca').style.display = 'none';
+            document.getElementById('modelo').style.display = 'none';
+            
+            document.getElementById('progress').textContent = 'Paso 1 de 3';
+            document.getElementById('btnSiguiente').disabled = false;
+            document.getElementById('btnSiguiente').textContent = 'Siguiente';
+            
+            // Ocultar mensajes de error
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+        }
+
+        function validarCampoActual() {
+            const campoId = campos[pasoActual - 1];
+            const valor = document.getElementById(campoId).value.trim();
+            const errorElement = document.getElementById(`error${campoId.charAt(0).toUpperCase() + campoId.slice(1)}`);
+            
+            if (!valor) {
+                document.getElementById(campoId).classList.add('error');
+                errorElement.style.display = 'block';
+                return false;
+            }
+            
+            // Validación específica para email
+            if (campoId === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(valor)) {
+                    document.getElementById(campoId).classList.add('error');
+                    errorElement.textContent = 'Ingrese un email válido';
+                    errorElement.style.display = 'block';
+                    return false;
+                }
+            }
+            
+            // Validación específica para teléfono (mínimo 10 dígitos)
+            if (campoId === 'telefono') {
+                const telefonoLimpio = valor.replace(/\D/g, '');
+                if (telefonoLimpio.length < 10) {
+                    document.getElementById(campoId).classList.add('error');
+                    errorElement.textContent = 'Ingrese un teléfono válido (mínimo 10 dígitos)';
+                    errorElement.style.display = 'block';
+                    return false;
+                }
+            }
+            
+            document.getElementById(campoId).classList.remove('error');
+            errorElement.style.display = 'none';
+            
+            // Guardar el valor en clienteActual
+            clienteActual[campoId] = valor;
+            
+            return true;
+        }
+
+        function siguientePaso() {
+            if (!validarCampoActual()) {
+                return;
+            }
+
+            if (pasoActual < 3) {
+                // Ocultar campo actual
+                document.getElementById(campos[pasoActual - 1]).style.display = 'none';
+                
+                // Avanzar al siguiente paso
+                pasoActual++;
+                
+                // Mostrar siguiente campo
+                document.getElementById(campos[pasoActual - 1]).style.display = 'block';
+                document.getElementById(campos[pasoActual - 1]).focus();
+                
+                document.getElementById('progress').textContent = `Paso ${pasoActual} de 3`;
+                
+                // Si es el último paso, cambiar texto del botón
+                if (pasoActual === 3) {
+                    document.getElementById('btnSiguiente').textContent = 'Guardar Cliente';
+                }
+            } else {
+                // Último paso - guardar cliente
+                guardarCliente();
+            }
+        }
+
+        function guardarCliente() {
+            // Crear objeto cliente con los datos
+            const nuevoCliente = {
+                id: Date.now(),
+                nombre: clienteActual.nombre,
+                marca: clienteActual.marca,
+                modelo: clienteActual.modelo
+            };
+            
+            // Agregar al array de clientes
+            clientes.push(nuevoCliente);
+            
+            // Actualizar la lista visible
+            actualizarListaClientes();
+            
+            // Mostrar mensaje de éxito y cerrar modal
+            cerrarModal();
+            
+            // Opcional: Mostrar notificación
+            alert(`¡Cliente ${nuevoCliente.nombre} agregado con éxito!`);
+        }
+
+        function actualizarListaClientes() {
+            const grid = document.getElementById('clientesGrid');
+            
+            if (clientes.length === 0) {
+                grid.innerHTML = '<div class="empty-message">No hay clientes registrados</div>';
+                return;
+            }
+            
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <div class="cliente-item">
+                        <p class="nombre">👤 ${cliente.nombre}</p>
+                        <p>📧 ${cliente.marca}</p>
+                        <p>📞 ${cliente.modelo}</p>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        // Cerrar modal si se hace clic fuera del contenido
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
+
+        // Permitir enviar con Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('modalOverlay').style.display === 'flex') {
+                e.preventDefault();
+                siguientePaso();
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('modalOverlay').style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+
+        // Inicializar: ocultar todos los campos excepto el primero
+        window.onload = function() {
+            document.getElementById('marca').style.display = 'none';
+            document.getElementById('modelo').style.display = 'none';
+            
+            // Agregar algunos clientes de ejemplo
+            clientes = [
+                {
+                    id: 1,
+                    nombre: 'María García',
+                    marca: 'maria@email.com',
+                    modelo: '+52 555 123 4567'
+                },
+                {
+                    id: 2,
+                    nombre: 'Carlos López',
+                    marca: 'carlos@email.com',
+                    modelo: '+52 555 987 6543'
+                }
+            ];
+            actualizarListaClientes();
+        };
+    </script>
+</body>
+</html>
