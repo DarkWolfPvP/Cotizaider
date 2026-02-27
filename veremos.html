@@ -12,7 +12,7 @@
         <button class="btn-agregar" onclick="abrirModal()">➕ Agregar Cliente</button>
         <button class="btn-agregar" onclick="ModalRecep()">➕ Recepcion de Equipo</button>
         
-        <!-- Lista de clientes -->
+                                                    <!-- Lista de clientes -->
         <div class="clientes-lista">
             <h3>Recepciones realizadas</h3>
             <div class="clientes-grid" id="clientesGrid">
@@ -21,11 +21,11 @@
         </div>
     </div>
 
-    <!-- Modal flotante de añadir cliente-->
+                                            <!-- Modal flotante de añadir cliente-->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h2>Nueva Recepción</h2>
-            <div class="progress" id="progress">Paso 1 de 3</div>
+            <div class="progress" id="progress">Paso 1 de 4</div>
             
             <form id="clienteForm" onsubmit="return false;">
                 <div class="form-group">
@@ -35,16 +35,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="marca">Dirección: </label>
-                    <input type="text" id="marca" placeholder="Ej: Batallon de San Patricio" autocomplete="off">
-                    <div class="error-message" id="errorMarca">El nombre es requerido</div>
+                    <label for="direccion">Dirección: </label>
+                    <input type="text" id="direccion" placeholder="Ej: Batallon de San Patricio" autocomplete="off">
+                    <div class="error-message" id="errorDireccion">Direccion es requerida</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="modelo">Telefono: </label>
-                    <input type="text" id="modelo" placeholder="Ej: 3317518530" autocomplete="off">
-                    <div class="error-message" id="errorModelo">El teléfono es requerido</div>
+                    <label for="telefono">Telefono: </label>
+                    <input type="text" id="telefono" placeholder="Ej: 3317518530" autocomplete="off">
+                    <div class="error-message" id="errorTelefono">El teléfono es requerido</div>
                 </div>
+
+                <div class="form-group">
+                    <label for="correo">correo: </label>
+                    <input type="text" id="correo" placeholder="Ej: ejemplo@ejemplo.com" autocomplete="off">
+                    <div class="error-message" id="errorCorreo">correo requerido</div>
+                </div>
+
 
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
@@ -53,7 +60,7 @@
             </form>
         </div>
     </div>
-    <!--Modal flotante de recepcion-->
+                                                <!--Modal flotante de recepcion-->
     <div class="modal-overlay" id="modalRecepOverlay">
         <div class="modal">
             <h2>Nueva Recepción</h2>
@@ -118,16 +125,17 @@
 
     <script>
         let pasoActual = 1;
-        const campos = ['nombre', 'marca', 'modelo'];
+        const campos = ['nombre', 'direccion', 'telefono', 'correo'];
         let clienteActual = {
             nombre: '',
-            marca: '',
-            modelo: ''
+            direccion: '',
+            telefono: '',
+            correo:''
         };
         
-        // Array para almacenar los clientes
+                                                        // Array para almacenar los clientes
         let clientes = [];
-        // ABRIR MODAL
+                                                                // ABRIR MODAL
         function abrirModal() {
             resetearFormulario();
             document.getElementById('modalOverlay').style.display = 'flex';
@@ -139,7 +147,7 @@
             document.getElementById('modalRecepOverlay').style.display = 'flex';
             document.getElementById('nombre').focus();
         }
-        // CERRAR MODAL
+                                                                // CERRAR MODAL
         function cerrarModal() {
             document.getElementById('modalOverlay').style.display = 'none';
             document.getElementById('modalRecepOverlay').style.display = 'none';
@@ -148,23 +156,24 @@
 
         function resetearFormulario() {
             pasoActual = 1;
-            clienteActual = { nombre: '', marca: '', modelo: '' };
+            clienteActual = { nombre: '', direccion: '', telefono: '', correo:'' };
             campos.forEach(campo => {
                 document.getElementById(campo).value = '';
                 document.getElementById(campo).style.display = 'block';
                 document.getElementById(campo).classList.remove('error');
             });
             
-            // Mostrar solo el primer campo
+                                                        // Mostrar solo el primer campo
             document.getElementById('nombre').style.display = 'block';
-            document.getElementById('marca').style.display = 'none';
-            document.getElementById('modelo').style.display = 'none';
+            document.getElementById('direccion').style.display = 'none';
+            document.getElementById('telefono').style.display = 'none';
+            document.getElementById('correo').style.display = 'none';
             
-            document.getElementById('progress').textContent = 'Paso 1 de 3';
+            document.getElementById('progress').textContent = 'Paso 1 de 4';
             document.getElementById('btnSiguiente').disabled = false;
             document.getElementById('btnSiguiente').textContent = 'Siguiente';
             
-            // Ocultar mensajes de error
+                                                        // Ocultar mensajes de error
             document.querySelectorAll('.error-message').forEach(msg => {
                 msg.style.display = 'none';
             });
@@ -181,18 +190,18 @@
                 return false;
             }
             
-            // Validación específica para email
-            if (campoId === 'email') {
+                                                    // Validación específica para email
+            if (campoId === 'correo') {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(valor)) {
                     document.getElementById(campoId).classList.add('error');
-                    errorElement.textContent = 'Ingrese un email válido';
+                    errorElement.textContent = 'Ingrese un correo válido';
                     errorElement.style.display = 'block';
                     return false;
                 }
             }
             
-            // Validación específica para teléfono (mínimo 10 dígitos)
+                                            // Validación específica para teléfono (mínimo 10 dígitos)
             if (campoId === 'telefono') {
                 const telefonoLimpio = valor.replace(/\D/g, '');
                 if (telefonoLimpio.length < 10) {
@@ -206,7 +215,7 @@
             document.getElementById(campoId).classList.remove('error');
             errorElement.style.display = 'none';
             
-            // Guardar el valor en clienteActual
+                                                    // Guardar el valor en clienteActual
             clienteActual[campoId] = valor;
             
             return true;
@@ -217,48 +226,49 @@
                 return;
             }
 
-            if (pasoActual < 3) {
-                // Ocultar campo actual
+            if (pasoActual < 4) {
+                                                        // Ocultar campo actual
                 document.getElementById(campos[pasoActual - 1]).style.display = 'none';
                 
-                // Avanzar al siguiente paso
+                                                        // Avanzar al siguiente paso
                 pasoActual++;
                 
-                // Mostrar siguiente campo
+                                                        // Mostrar siguiente campo
                 document.getElementById(campos[pasoActual - 1]).style.display = 'block';
                 document.getElementById(campos[pasoActual - 1]).focus();
                 
-                document.getElementById('progress').textContent = `Paso ${pasoActual} de 3`;
+                document.getElementById('progress').textContent = `Paso ${pasoActual} de 4`;
                 
-                // Si es el último paso, cambiar texto del botón
-                if (pasoActual === 3) {
+                                                        // Si es el último paso, cambiar texto del botón
+                if (pasoActual === 4) {
                     document.getElementById('btnSiguiente').textContent = 'Guardar Cliente';
                 }
             } else {
-                // Último paso - guardar cliente
+                                                        // Último paso - guardar cliente
                 guardarCliente();
             }
         }
 
         function guardarCliente() {
-            // Crear objeto cliente con los datos
+                                                    // Crear objeto cliente con los datos
             const nuevoCliente = {
                 id: Date.now(),
                 nombre: clienteActual.nombre,
-                marca: clienteActual.marca,
-                modelo: clienteActual.modelo
+                direccion: clienteActual.direccion,
+                telefono: clienteActual.telefono,
+                correo: clienteActual.correo
             };
             
-            // Agregar al array de clientes
+                                                            // Agregar al array de clientes
             clientes.push(nuevoCliente);
             
-            // Actualizar la lista visible
+                                                            // Actualizar la lista visible
             actualizarListaClientes();
             
-            // Mostrar mensaje de éxito y cerrar modal
+                                                            // Mostrar mensaje de éxito y cerrar modal
             cerrarModal();
             
-            // Opcional: Mostrar notificación
+                                                            // Opcional: Mostrar notificación
             alert(`¡Cliente ${nuevoCliente.nombre} agregado con éxito!`);
         }
 
@@ -275,8 +285,9 @@
                 html += `
                     <div class="cliente-item">
                         <p class="nombre">👤 ${cliente.nombre}</p>
-                        <p>📧 ${cliente.marca}</p>
-                        <p>📞 ${cliente.modelo}</p>
+                        <p>📧 ${cliente.direccion}</p>
+                        <p>📞 ${cliente.telefono}</p>
+                        <p>📞 ${cliente.correo}</p>
                     </div>
                 `;
             });
@@ -284,7 +295,7 @@
             grid.innerHTML = html;
         }
 
-        // Cerrar modal si se hace clic fuera del contenido
+                                                        // Cerrar modal si se hace clic fuera del contenido
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) {
                 cerrarModal();
@@ -296,7 +307,7 @@
             }
         });
 
-        // Permitir enviar con Enter
+                                                            // Permitir enviar con Enter
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && document.getElementById('modalOverlay').style.display === 'flex') {
                 e.preventDefault();
@@ -318,24 +329,26 @@
             }
         });
 
-        // Inicializar: ocultar todos los campos excepto el primero
+                                                            // Inicializar: ocultar todos los campos excepto el primero
         window.onload = function() {
-            document.getElementById('marca').style.display = 'none';
-            document.getElementById('modelo').style.display = 'none';
+            document.getElementById('direccion').style.display = 'none';
+            document.getElementById('telefono').style.display = 'none';
             
-            // Agregar algunos clientes de ejemplo
+                                                                // Agregar algunos clientes de ejemplo
             clientes = [
                 {
                     id: 1,
                     nombre: 'María García',
-                    marca: 'maria@email.com',
-                    modelo: '+52 555 123 4567'
+                    direccion: 'maria@email.com',
+                    telefono: '+52 555 123 4567',
+                    correo: 'hector'
                 },
                 {
                     id: 2,
                     nombre: 'Carlos López',
-                    marca: 'carlos@email.com',
-                    modelo: '+52 555 987 6543'
+                    direccion: 'carlos@email.com',
+                    telefono: '+52 555 987 6543',
+                    correo: 'hector'
                 }
             ];
             actualizarListaClientes();
