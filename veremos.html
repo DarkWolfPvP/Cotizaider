@@ -29,20 +29,20 @@
             
             <form id="clienteForm" onsubmit="return false;">
                 <div class="form-group">
-                    <label for="nombre">Equipo: </label>
-                    <input type="text" id="nombre" placeholder="Ej: Monitor " autocomplete="off">
+                    <label for="nombre">Nombre Completo: </label>
+                    <input type="text" id="nombre" placeholder="Ej: Fernando Andrade" autocomplete="off">
                     <div class="error-message" id="errorNombre">El nombre es requerido</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="marca">Marca: </label>
-                    <input type="text" id="marca" placeholder="Ej: Mindray" autocomplete="off">
+                    <label for="marca">Dirección: </label>
+                    <input type="text" id="marca" placeholder="Ej: Batallon de San Patricio" autocomplete="off">
                     <div class="error-message" id="errorMarca">El nombre es requerido</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="modelo">Modelo: </label>
-                    <input type="text" id="modelo" placeholder="Ej: Umec" autocomplete="off">
+                    <label for="modelo">Telefono: </label>
+                    <input type="text" id="modelo" placeholder="Ej: 3317518530" autocomplete="off">
                     <div class="error-message" id="errorModelo">El teléfono es requerido</div>
                 </div>
 
@@ -127,19 +127,19 @@
         
         // Array para almacenar los clientes
         let clientes = [];
-
+        // ABRIR MODAL
         function abrirModal() {
             resetearFormulario();
             document.getElementById('modalOverlay').style.display = 'flex';
             document.getElementById('nombre').focus();
         }
-
+        
         function ModalRecep() {
             resetearFormulario();
             document.getElementById('modalRecepOverlay').style.display = 'flex';
             document.getElementById('nombre').focus();
         }
-
+        // CERRAR MODAL
         function cerrarModal() {
             document.getElementById('modalOverlay').style.display = 'none';
             document.getElementById('modalRecepOverlay').style.display = 'none';
@@ -290,6 +290,11 @@
                 cerrarModal();
             }
         });
+        document.getElementById('modalRecepOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
 
         // Permitir enviar con Enter
         document.addEventListener('keydown', function(e) {
@@ -299,6 +304,16 @@
             }
             
             if (e.key === 'Escape' && document.getElementById('modalOverlay').style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('modalRecepOverlay').style.display === 'flex') {
+                e.preventDefault();
+                siguientePaso();
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('modalRecepOverlay').style.display === 'flex') {
                 cerrarModal();
             }
         });
