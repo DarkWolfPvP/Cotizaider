@@ -258,8 +258,7 @@
             // Mostrar mensaje de éxito y cerrar modal
             cerrarModal();
             
-            // Opcional: Mostrar notificación
-            alert(`¡Cliente ${nuevoCliente.nombre} agregado con éxito!`);
+            
         }
 
         function actualizarListaClientes() {
@@ -290,6 +289,11 @@
                 cerrarModal();
             }
         });
+        document.getElementById('modalRecepOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
 
         // Permitir enviar con Enter
         document.addEventListener('keydown', function(e) {
@@ -299,6 +303,16 @@
             }
             
             if (e.key === 'Escape' && document.getElementById('modalOverlay').style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('modalRecepOverlay').style.display === 'flex') {
+                e.preventDefault();
+                siguientePaso();
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('modalRecepOverlay').style.display === 'flex') {
                 cerrarModal();
             }
         });
