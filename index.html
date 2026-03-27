@@ -37,22 +37,22 @@
             
             <div class="form-group">
                 <label for="companyName">Nombre de la Empresa:</label>
-                <input type="text" id="companyName" placeholder="Coito">
+                <input type="text" id="companyName" placeholder="P&A Medical">
             </div>
             
             <div class="form-group" >
                 <label for="companyAddress">Dirección:</label>
-                <input type="text" id="companyAddress" placeholder="Coito">
+                <input type="text" id="companyAddress" placeholder="Oblatos">
             </div>
             
             <div class="form-group">
                 <label for="companyPhone">Teléfono:</label>
-                <input type="text" id="companyPhone" placeholder="Coito">
+                <input type="number" id="companyPhone" placeholder="Telefono asesor">
             </div>
             
             <div class="form-group">
-                <label for="companyBrand">Marca:</label>
-                <input type="text" id="companyBrand" placeholder="Coito">
+                <label for="companyBrand">Asesor:</label>
+                <input type="text" id="companyBrand" placeholder="Nombre del asesor">
             </div>
             
             <div class="form-group">
@@ -72,12 +72,17 @@
             
             <div class="form-group">
                 <label for="clientName">Nombre del Cliente:</label>
-                <input type="text" id="clientName" placeholder="Coito">
+                <input type="text" id="clientName" placeholder="javier">
             </div>
             
             <div class="form-group">
                 <label for="clientAddress">Dirección del Cliente:</label>
-                <input type="text" id="clientAddress" placeholder="Coito">
+                <input type="text" id="clientAddress" placeholder="su casa">
+            </div>
+
+            <div class="form-group">
+                <label for="clientNumber">Número del Cliente:</label>
+                <input type="number" id="clientNumber" placeholder="3313151418">
             </div>
             
             <h3>Productos/Servicios</h3>
@@ -461,6 +466,7 @@
             const validUntil = document.getElementById('validUntil').value;
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
+            const clientNumber = document.getElementById('clientNumber').value;
             const shippingInfo = document.getElementById('shippingInfo').value;
             const warrantyInfo = document.getElementById('warrantyInfo').value;
             const footerText = document.getElementById('footerText').value;
@@ -556,6 +562,7 @@
             doc.setFont('helvetica', 'normal');
             doc.text(clientName, marginLeft, currentY + 5);
             doc.text(clientAddress, marginLeft, currentY + 10);
+            doc.text(clientNumber, marginLeft, currentY + 15);
             currentY += 20;
             
             // Tabla de productos
@@ -681,6 +688,7 @@
             const validUntil = document.getElementById('validUntil').value;
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
+            const clientNumber = document.getElementById('clientNumber').value;
             const shippingInfo = document.getElementById('shippingInfo').value;
             const warrantyInfo = document.getElementById('warrantyInfo').value;
             const footerText = document.getElementById('footerText').value;
@@ -773,6 +781,7 @@
             doc.setFont('helvetica', 'normal');
             doc.text(clientName, marginLeft, currentY + 5);
             doc.text(clientAddress, marginLeft, currentY + 10);
+            doc.text(clientNumber, marginLeft, currentY + 15);
             currentY += 20;
             
             // Tabla de productos
