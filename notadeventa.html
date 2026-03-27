@@ -75,6 +75,11 @@
                 <label for="clientAddress">Dirección del Cliente:</label>
                 <input type="text" id="clientAddress" placeholder="Coito">
             </div>
+
+            <div class="form-group">
+                <label for="clientNumber">Número del Cliente:</label>
+                <input type="number" id="clientNumber" placeholder="3313151418">
+            </div>
             
             <h3>Productos/Servicios</h3>
             <div id="productsContainer">
@@ -473,6 +478,7 @@
             const paymentType = document.getElementById('paymentType').value;
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
+            const clientNumber = document.getElementById('clientNumber').value;
             const shippingInfo = document.getElementById('shippingInfo').value;
             const warrantyInfo = document.getElementById('warrantyInfo').value;
             const warrantyStart = document.getElementById('warrantyStart').value;
@@ -563,6 +569,7 @@
             doc.setFont('helvetica', 'normal');
             doc.text(clientName, marginLeft, currentY + 5);
             doc.text(clientAddress, marginLeft, currentY + 10);
+            doc.text(clientNumber, marginLeft, currentY + 15);
             currentY += 20;
             
             // Tabla de productos
@@ -744,6 +751,7 @@
             const paymentType = document.getElementById('paymentType').value;
             const clientName = document.getElementById('clientName').value;
             const clientAddress = document.getElementById('clientAddress').value;
+            const clientNumber = document.getElementById('clientNumber').value;
             const shippingInfo = document.getElementById('shippingInfo').value;
             const warrantyInfo = document.getElementById('warrantyInfo').value;
             const warrantyStart = document.getElementById('warrantyStart').value;
@@ -834,6 +842,7 @@
             doc.setFont('helvetica', 'normal');
             doc.text(clientName, marginLeft, currentY + 5);
             doc.text(clientAddress, marginLeft, currentY + 10);
+            doc.text(clientNumber, marginLeft, currentY + 15);
             currentY += 20;
             
             // Tabla de productos
