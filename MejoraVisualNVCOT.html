@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css\RecepStyles.css">
+    <title>Gestión de Clientes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>BIENVENIDO A P&A MEDICAL</h1>
+        <h2>¿Que deseas realizar?</h2>
+        <button class="btn-agregar" onclick="abrirModalCOT()">➕ Cotizacion</button>
+        <button class="btn-agregar" onclick="abrirModalNV()">➕ Nota de Venta</button>
+        
+                                                    <!-- Lista de clientes -->
+        <div class="clientes-lista">
+            <h3>Recepciones realizadas</h3>
+            <div class="clientes-grid" id="clientesGrid">
+                <div class="empty-message">No hay clientes registrados</div>
+            </div>
+        </div>
+    </div>
+
+                                            <!-- Modal flotante de Cotizacion-->
+    <div class="modal-overlay" id="modalOverlayCOT">
+        <div class="modal">
+            <h2>Nueva Cotizacion</h2>
+            <div class="progress" id="progress">Paso 1 de 14</div>
+            
+            <form id="clienteForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="nombreEmpresa">Nombre Empresa: </label>
+                    <input type="text" id="nombreEmpresa" placeholder="Ej: P&A Medical" autocomplete="off">
+                    <div class="error-message" id="errorNombreEmpresa">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccionEmpresa">Dirección Empresa: </label>
+                    <input type="text" id="direccionEmpresa" placeholder="Ej: Batallon de San Patricio" autocomplete="off">
+                    <div class="error-message" id="errorDireccionEmpresa">Direccion es requerida</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreAsesor">Nombre del Asesor: </label>
+                    <input type="text" id="nombreAsesor" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorNombreAsesor">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefonoAsesor">Telefono del Asesor: </label>
+                    <input type="text" id="telefonoAsesor" placeholder="Ej: 3317518530" autocomplete="off">
+                    <div class="error-message" id="errorTelefonoAsesor">El teléfono es requerido</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="numeroCOT">Numero de COT: </label>
+                    <input type="number" id="numeroCOT" placeholder="Ej: 001" autocomplete="off">
+                    <div class="error-message" id="errorNumeroCOT">Num. COT requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaCOT">Fecha de COT </label>
+                    <input type="text" id="fechaCOT" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorFechaCOT">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaVAL">Validez: </label>
+                    <input type="text" id="fechaVAL" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorFechaVAL">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreCliente">Nombre del Cliente: </label>
+                    <input type="text" id="nombreCliente" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorNombreCliente">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccionCliente">Direccion del Cliente: </label>
+                    <input type="text" id="direccionCliente" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorDireccionCliente">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefonoCliente">Telefono del Cliente: </label>
+                    <input type="text" id="telefonoCliente" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorTelefonoCliente">Asesor requerido</div>
+                </div>
+
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                    <button type="button" class="btn-siguiente" id="btnSiguiente" onclick="siguientePaso()">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+                                                <!--Modal flotante de NOTA DE VENTA-->
+    <div class="modal-overlay" id="modalOverlayNV">
+        <div class="modal">
+            <h2>Nueva NOTA DE VENTA</h2>
+            <div class="progress" id="progress">Paso 1 de 10</div>
+            
+            <form id="clienteForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="nombreEmpresa">Nombre Empresa: </label>
+                    <input type="text" id="nombreEmpresaNV" placeholder="Ej: P&A Medical" autocomplete="off">
+                    <div class="error-message" id="errorNombreEmpresaNV">El nombre es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccionEmpresa">Dirección Empresa: </label>
+                    <input type="text" id="direccionEmpresaNV" placeholder="Ej: Batallon de San Patricio" autocomplete="off">
+                    <div class="error-message" id="errorDireccionEmpresaNV">Direccion es requerida</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreAsesor">Nombre del Asesor: </label>
+                    <input type="text" id="nombreAsesorNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorNombreAsesorNV">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefonoAsesor">Telefono del Asesor: </label>
+                    <input type="text" id="telefonoAsesorNV" placeholder="Ej: 3317518530" autocomplete="off">
+                    <div class="error-message" id="errorTelefonoAsesorNV">El teléfono es requerido</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="numeroCOT">Numero de COT: </label>
+                    <input type="number" id="numeroCOTNV" placeholder="Ej: 001" autocomplete="off">
+                    <div class="error-message" id="errorNumeroCOTNV">Num. COT requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaCOT">Fecha de COT </label>
+                    <input type="text" id="fechaCOTNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorFechaCOTNV">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaVAL">Validez: </label>
+                    <input type="text" id="fechaVALNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorFechaVALNV">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombreCliente">Nombre del Cliente: </label>
+                    <input type="text" id="nombreClienteNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorNombreClienteNV">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccionCliente">Direccion del Cliente: </label>
+                    <input type="text" id="direccionClienteNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorDireccionClienteNV">Asesor requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefonoCliente">Telefono del Cliente: </label>
+                    <input type="text" id="telefonoClienteNV" placeholder="Ej: Fernando Andrade" autocomplete="off">
+                    <div class="error-message" id="errorTelefonoClienteNV">Asesor requerido</div>
+                </div>
+
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                    <button type="button" class="btn-siguiente" id="btnSiguiente" onclick="siguientePaso()">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let pasoActual = 1;
+        const campos = ['nombreEmpresa', 'direccionEmpresa', 'nombreAsesor', 'telefonoAsesor','numeroCOT','fechaCOT','fechaVAL','nombreCliente','direccionCliente','telefonoCliente'];
+        let COTactual = {
+            nombreEmpresa: '',
+            direccionEmpresa: '',
+            nombreAsesor:'',
+            telefonoAsesor: '',
+            numeroCOT:'',
+            fechaCOT:'',
+            fechaVAL:'',
+            nombreCliente:'',
+            direccionCliente:'',
+            telefonoCliente:''
+        };
+        const campos2 = ['nombreEmpresaNV', 'direccionEmpresaNV', 'nombreAsesorNV', 'telefonoAsesorNV','numeroCOTNV','fechaCOTNV','fechaVALNV','nombreClienteNV','direccionClienteNV','telefonoClienteNV'];
+        let NVactual = {
+            nombreEmpresaNV: '',
+            direccionEmpresaNV: '',
+            nombreAsesorNV:'',
+            telefonoAsesorNV: '',
+            numeroCOTNV:'',
+            fechaCOTNV:'',
+            fechaVALNV:'',
+            nombreClienteNV:'',
+            direccionClienteNV:'',
+            telefonoClienteNV:''
+        };
+        
+                                                        // Array para almacenar los clientes
+        let Cotizaciones = [];
+                                                                // ABRIR MODAL
+        function abrirModalCOT() {
+            resetearFormulario();
+            document.getElementById('modalOverlayCOT').style.display = 'flex';
+            document.getElementById('nombreEmpresa').focus();
+        }
+        
+        function abrirModalNV() {
+            resetearFormularioNV();
+            document.getElementById('modalOverlayNV').style.display = 'flex';
+            document.getElementById('nombreEmpresa').focus();
+        }
+                                                                // CERRAR MODAL
+        function cerrarModal() {
+            document.getElementById('modalOverlayCOT').style.display = 'none';
+            document.getElementById('modalOverlayNV').style.display = 'none';
+            resetearFormulario();
+        }
+
+        function resetearFormulario() {
+            pasoActual = 1;
+            COTactual = { nombreEmpresa: '',
+                            direccionEmpresa: '',
+                            nombreAsesor:'',
+                            telefonoAsesor: '',
+                            numeroCOT:'',
+                            fechaCOT:'',
+                            fechaVAL:'',
+                            nombreCliente:'',
+                            direccionCliente:'',
+                            telefonoCliente:'' };
+            campos.forEach(campo => {
+                document.getElementById(campo).value = '';
+                document.getElementById(campo).style.display = 'block';
+                document.getElementById(campo).classList.remove('error');
+            });
+            
+                                                        // Mostrar solo el primer campo
+            document.getElementById('nombreEmpresa').style.display = 'block';
+            document.getElementById('direccionEmpresa').style.display = 'none';
+            document.getElementById('nombreAsesor').style.display = 'none';
+            document.getElementById('telefonoAsesor').style.display = 'none';
+            document.getElementById('numeroCOT').style.display = 'none';
+            document.getElementById('fechaCOT').style.display = 'none';
+            document.getElementById('fechaVAL').style.display = 'none';
+            document.getElementById('nombreCliente').style.display = 'none';
+            document.getElementById('direccionCliente').style.display = 'none';
+            document.getElementById('telefonoCliente').style.display = 'none';
+            
+
+            document.getElementById('progress').textContent = 'Paso 1 de 10';
+            document.getElementById('btnSiguiente').disabled = false;
+            document.getElementById('btnSiguiente').textContent = 'Siguiente';
+            
+                                                        // Ocultar mensajes de error
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+        }
+        
+        function resetearFormularioNV() {
+            pasoActual = 1;
+            NVactual = { nombreEmpresaNV: '',
+                        direccionEmpresaNV: '',
+                        nombreAsesorNV:'',
+                        telefonoAsesorNV: '',
+                        numeroCOTNV:'',
+                        fechaCOTNV:'',
+                        fechaVALNV:'',
+                        nombreClienteNV:'',
+                        direccionClienteNV:'',
+                        telefonoClienteNV:''};
+            campos.forEach(campo => {
+                document.getElementById(campo).value = '';
+                document.getElementById(campo).style.display = 'block';
+                document.getElementById(campo).classList.remove('error');
+            });
+            
+                                                        // Mostrar solo el primer campo
+            document.getElementById('nombreEmpresaNV').style.display = 'block';
+            document.getElementById('direccionEmpresaNV').style.display = 'none';
+            document.getElementById('nombreAsesorNV').style.display = 'none';
+            document.getElementById('telefonoAsesorNV').style.display = 'none';
+            document.getElementById('numeroCOTNV').style.display = 'none';
+            document.getElementById('fechaCOTNV').style.display = 'none';
+            document.getElementById('fechaVALNV').style.display = 'none';
+            document.getElementById('nombreClienteNV').style.display = 'none';
+            document.getElementById('direccionClienteNV').style.display = 'none';
+            document.getElementById('telefonoClienteNV').style.display = 'none';
+            
+
+            document.getElementById('progress').textContent = 'Paso 1 de 10';
+            document.getElementById('btnSiguiente').disabled = false;
+            document.getElementById('btnSiguiente').textContent = 'Siguiente';
+            
+                                                        // Ocultar mensajes de error
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+        }
+
+        function validarCampoActual() {
+            const campoId = campos[pasoActual - 1];
+            const valor = document.getElementById(campoId).value.trim();
+            const errorElement = document.getElementById(`error${campoId.charAt(0).toUpperCase() + campoId.slice(1)}`);
+            
+            if (!valor) {
+                document.getElementById(campoId).classList.add('error');
+                errorElement.style.display = 'block';
+                return false;
+            }
+            
+                                                    // Validación específica para email
+            if (campoId === 'correo') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(valor)) {
+                    document.getElementById(campoId).classList.add('error');
+                    errorElement.textContent = 'Ingrese un correo válido';
+                    errorElement.style.display = 'block';
+                    return false;
+                }
+            }
+            
+                                            // Validación específica para teléfono (mínimo 10 dígitos)
+            if (campoId === 'telefono') {
+                const telefonoLimpio = valor.replace(/\D/g, '');
+                if (telefonoLimpio.length < 10) {
+                    document.getElementById(campoId).classList.add('error');
+                    errorElement.textContent = 'Ingrese un teléfono válido (mínimo 10 dígitos)';
+                    errorElement.style.display = 'block';
+                    return false;
+                }
+            }
+            
+            document.getElementById(campoId).classList.remove('error');
+            errorElement.style.display = 'none';
+            
+                                                    // Guardar el valor en clienteActual
+            COTactual[campoId] = valor;
+            
+            return true;
+        }
+
+        function siguientePaso() {
+            if (!validarCampoActual()) {
+                return;
+            }
+
+            if (pasoActual < 10) {
+                                                        // Ocultar campo actual
+                document.getElementById(campos[pasoActual - 1]).style.display = 'none';
+                
+                                                        // Avanzar al siguiente paso
+                pasoActual++;
+                
+                                                        // Mostrar siguiente campo
+                document.getElementById(campos[pasoActual - 1]).style.display = 'block';
+                document.getElementById(campos[pasoActual - 1]).focus();
+                
+                document.getElementById('progress').textContent = `Paso ${pasoActual} de 10`;
+                
+                                                        // Si es el último paso, cambiar texto del botón
+                if (pasoActual === 10) {
+                    document.getElementById('btnSiguiente').textContent = 'Guardar Cliente';
+                }
+            } else {
+                                                        // Último paso - guardar cliente
+                guardarCliente();
+            }
+        }
+
+        function guardarCliente() {
+                                                    // Crear objeto cliente con los datos
+            const nuevoCliente = {
+                id: Date.now(),
+                nombre: COTactual.nombreCliente,
+                direccion: COTactual.direccionCliente,
+                telefono: COTactual.telefonoCliente,
+                
+            };
+            
+                                                            // Agregar al array de clientes
+            clientes.push(nuevoCliente);
+            
+                                                            // Actualizar la lista visible
+            actualizarListaClientes();
+            
+                                                            // Mostrar mensaje de éxito y cerrar modal
+            cerrarModal();
+            
+            
+        }
+
+        function actualizarListaClientes() {
+            const grid = document.getElementById('clientesGrid');
+            
+            if (clientes.length === 0) {
+                grid.innerHTML = '<div class="empty-message">No hay clientes registrados</div>';
+                return;
+            }
+            
+            let html = '';
+            clientes.forEach(cliente => {
+                html += `
+                    <div class="cliente-item">
+                        <p class="nombre">👤 ${cliente.nombre}</p>
+                        <p>📧 ${cliente.direccion}</p>
+                        <p>📞 ${cliente.telefono}</p>
+                        
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+                                                        // Cerrar modal si se hace clic fuera del contenido
+        document.getElementById('modalOverlayCOT').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
+        document.getElementById('modalOverlayNV').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
+
+                                                            // Permitir enviar con Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('modalOverlayCOT').style.display === 'flex') {
+                e.preventDefault();
+                siguientePaso();
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('modalOverlayCOT').style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('modalOverlayNV').style.display === 'flex') {
+                e.preventDefault();
+                siguientePaso();
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('modalOverlayNV').style.display === 'flex') {
+                cerrarModal();
+            }
+        });
+
+        // Inicializar: ocultar todos los campos excepto el primero
+        window.onload = function() {
+            document.getElementById('nombreCliente').style.display = 'none';
+            document.getElementById('telefonoCliente').style.display = 'none';
+            
+            if (e.key === 'Escape' && document.getElementById('modalOverlayCOT').style.display === 'flex') {
+                cerrarModal();
+            }
+        };
+
+                                                            // Inicializar: ocultar todos los campos excepto el primero
+        window.onload = function() {
+            document.getElementById('nombreCliente').style.display = 'none';
+            document.getElementById('telefonoCliente').style.display = 'none';
+            
+                                                                // Agregar algunos clientes de ejemplo
+            clientes = [
+                {
+                    id: 1,
+                    nombre: 'María García',
+                    direccion: 'maria@email.com',
+                    telefono: '+52 555 123 4567',
+                    
+                },
+                {
+                    id: 2,
+                    nombre: 'Carlos López',
+                    direccion: 'carlos@email.com',
+                    telefono: '+52 555 987 6543',
+                    
+                }
+            ];
+            actualizarListaClientes();
+        };
+    </script>
+</body>
+</html>
