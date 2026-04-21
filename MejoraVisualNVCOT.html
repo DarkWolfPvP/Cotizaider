@@ -108,7 +108,7 @@
 
                                             <!--Intento de ingreso de datos-->
     <div class="modal-overlay" id="modalOverlayCOTP">
-        <div class="modal">
+        <div class="modalDatos">
         <h2>AGREGA LOS DATOS</h2>
             <div class="progress" id="progress">Paso 1 de 10</div>
             
@@ -525,6 +525,7 @@
                             
                         }</span>
                         <button class="remove-product" data-index="${displayIndex}">Eliminar</button>
+                        <button onclick="ocultar(this)" class="hide-product" >OCULTAR</button>
                     </div>
                     ${specificFields}
                     <div class="form-group">
@@ -578,6 +579,8 @@
                 productDiv.querySelector('.remove-product')?.addEventListener('click', function() {
                     this.setAttribute('data-index', displayIndex);
                     removeProduct.call(this);
+                    
+                
                 });
             });
         }
@@ -621,6 +624,28 @@
                 .value = products[index].importe;
             }
 
+       function ocultar(boton) {
+            // Encontrar el div padre
+            const div = boton.closest('.product-row');
+            div.classList.add('oculto');
+            
+            // Crear botón para mostrar el div nuevamente
+            const botonMostrar = document.createElement('button');
+            botonMostrar.textContent = 'Mostrar elemento';
+            botonMostrar.className = 'btn-mostrar';
+            
+            
+            // Agregar evento para mostrar el div
+            botonMostrar.addEventListener('click', function() {
+                div.classList.remove('oculto');
+                // Eliminar el botón de mostrar después de usarlo
+                this.remove();
+            });
+            
+            // Insertar el botón después del div oculto
+            div.parentNode.insertBefore(botonMostrar, div.nextSibling);
+        }
+        
         
         function removeProduct() {
             const displayIndex = parseInt(this.getAttribute('data-index'));

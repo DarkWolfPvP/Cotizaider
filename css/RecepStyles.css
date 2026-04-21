@@ -27,7 +27,7 @@
         }
 
         h2{
-            color: white;
+            color: rgb(0, 0, 0);
             margin-bottom: 30px;
             font-size: 1.5em;
         }
@@ -65,6 +65,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
 
         /* Modal container */
@@ -90,7 +91,7 @@
         }
 
         .modal h2 {
-            color: #333;
+            color: #ffffff;
             margin-bottom: 10px;
             font-size: 1.8em;
         }
@@ -234,4 +235,39 @@
             color: #999;
             text-align: center;
             padding: 20px;
+        }
+        
+        #clienteForm{
+            grid-row: 3;
+            
+        }
+        .btn-mostrar{
+            max-width: 4rem;
+            max-height: 2rem;
+        }
+        
+        .modalDatos{
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            overflow-y: auto;
+            width:90%;
+            height: 90%;
+            scrollbar-width: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .progress{
+            grid-row:2;
+        }
+
+        img{
+            max-width: 100px;
+            max-height: 100px;
+
+        }
+        .oculto{
+            display:none;
         }
