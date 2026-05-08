@@ -271,3 +271,22 @@
         .oculto{
             display:none;
         }
+        .product-descripcion{
+            min-width: fit-content;
+            width: 100%;
+        }
+        #productType{
+            background-color: #ffffff;
+            width: 50%;
+            text-align: center;
+            font-weight: bold;
+        }
+        #addProduct{
+            width: 50%;
+            background-color: rgb(124, 247, 240);
+            font-weight: bold;
+        }
+        #pdfPreview{
+            grid-column: 2/3;
+            grid-row: 1/4;
+        }
