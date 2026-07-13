@@ -111,6 +111,7 @@
         <div class="modalDatos">
         <h2>AGREGA LOS DATOS</h2>
         <div id="pdfPreview" class="card"></div>
+        
             <div class="progress" id="progress">Paso 1 de 10</div>
             
             <form id="clienteForm" onsubmit="return false;">
@@ -128,6 +129,7 @@
                 </div>
                 <button id="addProduct">+ Añadir Producto/Servicio</button>
           <div class="modal-buttons">
+                <button id="Preview">Visualizar</button>
                 <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
                  <button type="button" class="btn-siguiente" id="btnSiguiente" onclick="siguientePaso()">Siguiente</button>
         </div>
@@ -720,9 +722,10 @@
                       .replace(/_+/g, '_')
                       .replace(/^_|_$/g, '');
         }
+        document.getElementById('Preview').addEventListener('click', preview);
         function preview(){
             
-             const companyName = document.getElementById('companyName').value;
+            const companyName = document.getElementById('companyName').value;
             const companyAddress = document.getElementById('companyAddress').value;
             const companyPhone = document.getElementById('companyPhone').value;
             const companyBrand = document.getElementById('companyBrand').value;
